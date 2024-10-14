@@ -8,6 +8,7 @@ on:
 env: 
   REGISTRY: docker.io
   IMAGE_NAME: raymond7510/my-nestjs-api
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -29,6 +30,7 @@ jobs:
         run: npm run test:e2e
 
   build-and-push:
+    needs: test
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout code
