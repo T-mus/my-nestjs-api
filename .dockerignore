@@ -1,0 +1,11 @@
+.vscode/
+node_modules/
+test/
+.git/
+.gitignore
+*.md
+*.log
+*.env
+.prettierrc
+.prettierignore
+Dockerfile
