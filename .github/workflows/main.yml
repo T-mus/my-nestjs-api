@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: path/to/your/test-report-folder
+          path: ./test-report
 
   notify-telegram:
     needs: test
@@ -45,6 +45,6 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           curl -F chat_id=$TELEGRAM_CHAT_ID \
-               -F document=@"./report/test-report-file" \
+               -F document=@"./report/test-report-file.json" \
                -F caption="Test report for build ${{ github.sha }} - $(date)" \
                "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument"
