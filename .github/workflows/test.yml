@@ -1,6 +1,6 @@
 name: Run e2e tests and send the report to the Telegram bot
 
-on: workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   test:
