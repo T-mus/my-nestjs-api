@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 // prettier-ignore
 export const getMongoConfig = async (configService: ConfigService): Promise<MongooseModuleFactoryOptions> => {
     const uri =
-        'mongodb+srv://' +
+        `${configService.get<string>('MONGO_PROTOCOL', 'mongodb://')}` +
         `${configService.get('MONGO_LOGIN')}:${configService.get('MONGO_PASSWORD')}` +
         `@${configService.get('MONGO_HOST')}/${configService.get('MONGO_DB')}`
 
