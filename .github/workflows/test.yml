@@ -51,10 +51,10 @@ jobs:
           if [ -f "$REPORT_FILE" ]; then
             curl -F chat_id=$TELEGRAM_CHAT_ID \
               -F document=@"$REPORT_FILE" \
-              -F caption="**Test report for build:** `$GITHUB_SHA`" \
+              -F caption="<b>Test report for build:</b> <code>${{ github.sha }}</code>" \
               "${TELEGRAM_API_URL}/bot$TELEGRAM_BOT_TOKEN/sendDocument"
           else
             curl -F chat_id=$TELEGRAM_CHAT_ID \
-              -F text="Test report not found for build: \`$GITHUB_SHA\`" \
+              -F text="Test report not found for build: <code>${{ github.sha }}</code>" \
               "${TELEGRAM_API_URL}/bot$TELEGRAM_BOT_TOKEN/sendMessage"
           fi
