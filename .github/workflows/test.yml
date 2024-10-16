@@ -23,11 +23,8 @@ jobs:
       - name: Run e2e tests
         run: npm run test:e2e
 
-      - name: List files in test-report directory
-        run: ls -R ./test-report
-
       - name: Save test report as artifact
-        if: always() # Артефакт зберігається незалежно від успіху чи невдачі
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-report
@@ -43,24 +40,21 @@ jobs:
           name: test-report
           path: ./report
 
-      - name: List files in report directory
-        run: ls -R ./report
-
       - name: Send report to Telegram
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_API_URL: "https://api.telegram.org"
         run: |
-          REPORT_FILE="./report/report.html" # Замініть на фактичну назву файлу
+          REPORT_FILE="./report/report.html"
 
           if [ -f "$REPORT_FILE" ]; then
             curl -F chat_id=$TELEGRAM_CHAT_ID \
-                 -F document=@"$REPORT_FILE" \
-                 -F caption="Test report for build ${{ github.sha }} - $(date)" \
-                 "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument"
+              -F document=@"$REPORT_FILE" \
+              -F caption="Test report for build: \`$GITHUB_SHA\`" \
+              "${TELEGRAM_API_URL}/bot$TELEGRAM_BOT_TOKEN/sendDocument"
           else
-            # Якщо звіт не знайдено, надішліть текстове повідомлення
             curl -F chat_id=$TELEGRAM_CHAT_ID \
-                 -F text="Test report not found for build ${{ github.sha }} - $(date)" \
-                 "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage"
+              -F text="Test report not found for build: \`$GITHUB_SHA\`" \
+              "${TELEGRAM_API_URL}/bot$TELEGRAM_BOT_TOKEN/sendMessage"
           fi
