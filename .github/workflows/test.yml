@@ -34,29 +34,16 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Download test report artifact
+      - name: Download a test report artifact
         uses: actions/download-artifact@v3
         with:
           name: test-report
           path: ./report
 
       - name: Send report to Telegram
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_API_URL: "https://api.telegram.org"
-        run: |
-          REPORT_FILE="./report/report.html"
-
-          if [ -f "$REPORT_FILE" ]; then
-            curl -F chat_id=$TELEGRAM_CHAT_ID \
-              -F document=@"$REPORT_FILE" \
-              -F caption="Test report for build: \`${{ github.sha }}\`" \
-              -F parse_mode="Markdown" \
-              "${TELEGRAM_API_URL}/bot$TELEGRAM_BOT_TOKEN/sendDocument"
-          else
-            curl -F chat_id=$TELEGRAM_CHAT_ID \
-              -F text="Test report not found for build: \`${{ github.sha }}\`" \
-              -F parse_mode="Markdown" \
-              "${TELEGRAM_API_URL}/bot$TELEGRAM_BOT_TOKEN/sendMessage"
-          fi
+        uses: T-mus/telegram-test-notifier@v1
+        with:
+          telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          report_file: './report/report.html'
+          message: 'Test report for build: `${{ github.sha }}`'
