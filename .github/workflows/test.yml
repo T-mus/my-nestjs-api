@@ -41,7 +41,7 @@ jobs:
           path: ./report
 
       - name: Send report to Telegram
-        uses: T-mus/telegram-test-notifier@v1.1
+        uses: T-mus/telegram-test-notifier@v1
         with:
           telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
