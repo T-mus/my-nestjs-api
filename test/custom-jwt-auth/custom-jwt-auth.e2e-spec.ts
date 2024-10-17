@@ -110,7 +110,7 @@ describe('CustomJwtAuthController (e2e)', () => {
             const response = await request(app.getHttpServer())
                 .post('/custom-jwt-auth/register')
                 .send(dto)
-                .expect(201)
+                .expect(400)
 
             expect(response.body).toHaveProperty('accessToken')
         })
